@@ -13,9 +13,15 @@ def print_if(s, f):
     >>> print(result)  # print_if should return None
     None
     """
-    for x in s:
-        "*** YOUR CODE HERE ***"
+    # for x in s:
+    #     if f(x):
+    #         print(x)
+    # return None
 
+    for x in s:
+        print (x) if f(x) else None
+    return None
+# A Shandongnese typer.
 
 def close(s, k):
     """Return how many elements of s that are within k of their index.
@@ -32,7 +38,7 @@ def close(s, k):
     """
     count = 0
     for i in range(len(s)):  # Use a range to loop over indices
-        "*** YOUR CODE HERE ***"
+        count += 1 if abs(s[i]-i) <= k else 0
     return count
 
 
@@ -47,7 +53,7 @@ def close_list(s, k):
     >>> close_list(t, 2)  # 2, 3, 4, and 5 are all within 2 of their index
     [2, 4, 3, 5]
     """
-    return [___ for i in range(len(s)) if ___]
+    return [s[i] for i in range(len(s)) if abs(s[i]-i) <= k]
 
 
 from math import sqrt
@@ -63,8 +69,10 @@ def squares(s):
     >>> squares(seq)
     []
     """
-    return [___ for n in s if ___]
-
+    # return [round(sqrt(s[n])) for n in s if sqrt(s[n])==round(sqrt(s[n]))]
+    # 'round' means omit digits
+    return [round(sqrt(n)) for n in s if sqrt(n)==round(sqrt(n))]
+# n is the elements not the index. if use index, it would be 'for n in range(len(s))' 
 
 def double_eights(n):
     """Returns whether or not n has two digits in row that
