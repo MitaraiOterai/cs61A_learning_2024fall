@@ -171,8 +171,21 @@ def berry_finder(t):
     >>> berry_finder(t)
     True
     """
-    "*** YOUR CODE HERE ***"
-
+    def is_berry(x):
+        assert is_tree(x) or is_leaf(x), 'x must be a tree or a leaf'
+        return label(x) == 'berry'
+    if is_berry(t):
+        return True
+    for branch in branches(t):
+        if is_berry(branch):
+            return True
+        else:
+            for i in range(len(branches(branch))):
+                if berry_finder(branches(branch)[i]):
+                    return True
+            return berry_finder(branch)
+    return False
+# recursion is for nested lists, while 'for' loop is for ilter lists.
 
 HW_SOURCE_FILE=__file__
 
@@ -186,9 +199,12 @@ def max_path_sum(t):
     >>> max_path_sum(t2) # 5, 2, 10
     17
     """
-    "*** YOUR CODE HERE ***"
-
-
+    assert label(t) > 0 , 'label of a tree should be positive'
+    if is_leaf(t):
+        return label(t)
+    else:
+        return label(t) + max(max_path_sum(branch) for branch in branches(t))
+# copycat, recursion, recursion, and recursion!
 def mobile(left, right):
     """Construct a mobile from a left arm and a right arm."""
     assert is_arm(left), "left must be an arm"
