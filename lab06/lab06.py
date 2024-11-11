@@ -135,7 +135,8 @@ class Server:
         """Append the email to the inbox of the client it is addressed to.
             email is an instance of the Email class.
         """
-        self.clients.get(email.recipient_name).inbox.append(email)
+        # self.clients.get(email.recipient_name).inbox.append(email)
+        self.clients[email.recipient_name].inbox.append(email)
 
     def register_client(self, client):
         """Add a client to the clients mapping (which is a 
