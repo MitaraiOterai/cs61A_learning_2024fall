@@ -10,3 +10,5 @@ class B(A):
 class C(A):
     def __init__(self):
         return
+
+from lab07 import *
