@@ -189,7 +189,18 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     'testing'
     """
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    def in_limit(typed, source, limit):
+        return diff_function(typed, source, limit) <= limit
+    this_word = word_list[0]
+    for word in word_list:
+        if word == typed_word:
+            return word
+        if in_limit(typed_word, word, limit):
+            if diff_function(typed_word, word, limit) < diff_function(typed_word, this_word, limit):
+                this_word = word
+    return this_word if in_limit(typed_word, this_word, limit) else typed_word
+
+
     # END PROBLEM 5
 
 
@@ -216,7 +227,11 @@ def furry_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    # assert False, 'Remove this line'
+    def select_the_longer(typed, source):
+        return source if len(source) > len(typed) else typed
+    longer_word = select_the_longer(typed, source)
+    return abs(len(longer_word) - len(typed)) + sum([1 for i in range(len(typed)) if typed[i] != source[i]])
     # END PROBLEM 6
 
 
@@ -237,22 +252,29 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ___________: # Base cases should go here, you may add more base cases as needed.
+    # assert False, 'Remove this line'
+    if typed == source:
+        return 0
+    if limit <= 0: # Base cases should go here, you may add more base cases as needed.
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return float('inf')
         # END
+    if len(typed) == 0:
+        return len(source)
+    if len(source) == 0:
+        return len(typed)
+        # Base cases should go here, you may add more base cases as needed.
     # Recursive cases should go below here
-    if ___________: # Feel free to remove or add additional cases
+    if typed[0] == source[0]: # Feel free to remove or add additional cases
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return minimum_mewtations(typed[1:], source[1:], limit)
         # END
     else:
-        add = ... # Fill in these lines
-        remove = ...
-        substitute = ...
+        add = minimum_mewtations(typed, source[1:], limit - 1) # Fill in these lines
+        remove = minimum_mewtations(typed[1:], source, limit - 1)
+        substitute = minimum_mewtations(typed[1:], source[1:], limit - 1)
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return min(add, remove, substitute) + 1
         # END
 
 
@@ -298,7 +320,18 @@ def report_progress(typed, source, user_id, upload):
     0.2
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    def progress(typed, source):
+        typed.append(None)
+        # a small magic
+        for i in range(len(source)):
+            if typed[i] == None:
+                return i / len(source)
+            if typed[i] != source[i]:
+                return i/ len(source)
+        return 1
+    progress = progress(typed, source)
+    upload({'id': user_id, 'progress': progress})
+    return progress
     # END PROBLEM 8
 
 
@@ -322,7 +355,16 @@ def time_per_word(words, timestamps_per_player):
     """
     tpp = timestamps_per_player  # A shorter name (for convenience)
     # BEGIN PROBLEM 9
-    times = []  # You may remove this line
+    def tipp_calculator(tpp):
+        times = []
+        for i in range(len(tpp)):
+            times.append([])
+            # only two players.
+            for j in range(len(tpp[i]) - 1):
+                times[i].append(tpp[i][j + 1] - tpp[i][j])
+        return times
+    times = tipp_calculator(tpp)
+    # times = []  # You may remove this line
     # END PROBLEM 9
     return {'words': words, 'times': times}
 
