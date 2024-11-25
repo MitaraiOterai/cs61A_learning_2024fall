@@ -1,4 +1,5 @@
 {
     "Codegeex.GenerationPreference": "line by line",
-    "Codegeex.CommitMessage.LanguagePreference": "English"
+    "Codegeex.CommitMessage.LanguagePreference": "English",
+    "Codegeex.RepoIndex": true
 }

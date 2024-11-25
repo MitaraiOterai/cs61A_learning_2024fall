@@ -158,8 +158,16 @@ def memo_diff(diff_function):
 
     def memoized(typed, source, limit):
         # BEGIN PROBLEM EC
-        "*** YOUR CODE HERE ***"
+        key = (typed, source)
+        if key in cache:
+            cache_value, cache_limit = cache[key]
+            if limit <= cache_limit:
+                return cache_value
+        value = diff_function(typed, source, limit)
+        cache[key] = (value, limit)
+        return value
         # END PROBLEM EC
+
 
     return memoized
 
@@ -228,10 +236,18 @@ def furry_fixes(typed, source, limit):
     """
     # BEGIN PROBLEM 6
     # assert False, 'Remove this line'
-    def select_the_longer(typed, source):
-        return source if len(source) > len(typed) else typed
-    longer_word = select_the_longer(typed, source)
-    return abs(len(longer_word) - len(typed)) + sum([1 for i in range(len(typed)) if typed[i] != source[i]])
+    # if typed == [] or source == []: ??? why it not work?
+    if len(typed) == 0 or len(source) == 0:
+        return abs(len(typed) - len(source))
+    if limit < 0:
+        return float('inf')
+    if typed != source:
+        if typed[0] == source[0]:
+            return furry_fixes(typed[1:], source[1:], limit)
+        else:
+            return furry_fixes(typed[1:], source[1:], limit - 1) + 1
+    return 0
+    
     # END PROBLEM 6
 
 
@@ -391,10 +407,24 @@ def fastest_words(words_and_times):
     player_indices = range(len(times))  # contains an *index* for each player
     word_indices = range(len(words))    # contains an *index* for each word
     # BEGIN PROBLEM 10
-    "*** YOUR CODE HERE ***"
+ 
+    fastest = []
+    for _ in range(len(times)):
+        fastest.append([])
+    # creat fastest list for each player
+    for j in range (len(words)):
+        min_time = float('inf')
+        min_index = 0
+        min_word = None
+        # initialization
+        for i in range(len(times)):
+            if times[i][j] < min_time:
+                min_time = times[i][j]
+                min_word = words[j]
+                min_index = i
+        fastest[min_index].append(min_word)
+    return fastest
     # END PROBLEM 10
-
-
 def check_words_and_times(words_and_times):
     """Check that words_and_times is a {'words': words, 'times': times} dictionary
     in which each element of times is a list of numbers the same length as words.
