@@ -279,11 +279,51 @@ class FireAnt(Ant):
 
 # BEGIN Problem 6
 # The WallAnt class
+class WallAnt(Ant):
+    """WallAnt provides protection to other Ants."""
+    name = 'Wall'
+    food_cost = 4
+    implemented = True
+    def __init__(self, health=4):
+        super().__init__(health)
+    def action(self, gamestate):
+        """Do nothing and gain 3 coins in your third round."""
+        pass
 # END Problem 6
 
 # BEGIN Problem 7
 # The HungryAnt Class
-# END Problem 7
+class HungryAnt(Ant):
+    """HungryAnt provides protection to other Ants."""
+    name = 'Hungry'
+    food_cost = 4
+    implemented = True
+    chew_cooldown = 3
+    def __init__(self, health=1):
+        super().__init__(health)
+        self.cooldown = 0
+    def action(self, gamestate):
+        # self.cooldown -= 1
+        if self.cooldown <= 0:
+            self.pray_and_prey(gamestate)
+        else:
+            self.cooldown -= 1
+        
+    def pray_and_prey(self, gamestate):
+        if self.cooldown == 0:
+            preys = self.place.bees
+            if preys:
+                prey = random_bee(preys)
+                prey.reduce_health(prey.health)
+                self.cooldown = self.chew_cooldown
+    # There is no duplicate, don't worry.
+        # if self.place.bees:
+            # random_bee(self.place.bees).reduce_health(random_bee(self.place.bees).health)
+            # self.cooldown = self.chew_cooldown
+        # if self.place.bees:
+            # self.place.bees[0].reduce_health(self.place.bees[0].health)
+            # self.cooldown = self.chew_cooldown
+      # END Problem 7
 
 
 class ContainerAnt(Ant):
