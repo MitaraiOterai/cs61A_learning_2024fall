@@ -52,7 +52,7 @@ class Insect:
     next_id = 0  # Every insect gets a unique id number
     damage = 0
     # ADD CLASS ATTRIBUTES HERE
-
+    is_waterproof = False
     def __init__(self, health, place=None):
         """Create an Insect with a health amount and a starting PLACE."""
         self.health = health
@@ -99,6 +99,7 @@ class Ant(Insect):
     implemented = False  # Only implemented Ant classes should be instantiated
     food_cost = 0
     is_container = False
+    is_doubled = False
     # ADD CLASS ATTRIBUTES HERE
 
     def __init__(self, health=1):
@@ -140,7 +141,10 @@ class Ant(Insect):
     def double(self):
         """Double this ants's damage, if it has not already been doubled."""
         # BEGIN Problem 12
-        "*** YOUR CODE HERE ***"
+        # if self.is_doubled: # 我在不要笑挑战中取得了一秒的好成绩。
+        if not self.is_doubled:
+            self.damage *= 2
+            self.is_doubled = True
         # END Problem 12
 
 
@@ -418,11 +422,19 @@ class Water(Place):
         """Add an Insect to this place. If the insect is not waterproof, reduce
         its health to 0."""
         # BEGIN Problem 10
-        "*** YOUR CODE HERE ***"
+        Place.add_insect(self, insect)
+        if insect.is_waterproof is False:
+            insect.reduce_health(insect.health)
         # END Problem 10
 
 # BEGIN Problem 11
 # The ScubaThrower class
+class ScubaThrower(ThrowerAnt):
+    """ScubaThrower can throw leaves in water."""
+    name = 'Scuba'
+    food_cost = 6
+    implemented = True
+    is_waterproof = True
 # END Problem 11
 
 
@@ -433,7 +445,7 @@ class QueenAnt(ThrowerAnt):
     food_cost = 7
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 12
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem 12
 
     def action(self, gamestate):
@@ -441,7 +453,19 @@ class QueenAnt(ThrowerAnt):
         in her tunnel.
         """
         # BEGIN Problem 12
-        "*** YOUR CODE HERE ***"
+        def inspiration(next_place):
+            if next_place is None:
+                return
+            if next_place.ant:
+                next_ant = next_place.ant
+                next_ant.double()
+                # next_ant.damage *= 2
+                if next_ant.is_container and next_ant.ant_contained:
+                    next_ant.ant_contained.double()
+                    # next_ant.ant_contained.damage *= 2
+            inspiration(next_place.exit)
+        super().action(gamestate)
+        inspiration(self.place.exit) 
         # END Problem 12
 
     def reduce_health(self, amount):
@@ -449,7 +473,9 @@ class QueenAnt(ThrowerAnt):
         remaining, signal the end of the game.
         """
         # BEGIN Problem 12
-        "*** YOUR CODE HERE ***"
+        super().reduce_health(amount)
+        if self.health <= 0:
+            ants_lose()
         # END Problem 12
 
 
