@@ -9,14 +9,12 @@ test = {
           >>> # Testing status parameters
           >>> slow = SlowThrower()
           >>> SlowThrower.food_cost
-          50ae32be3e31df6c59633df7fdfb3a72
-          # locked
+          6
           >>> slow.health
-          d89cf7c79d5a479b0f636734143ed5e6
-          # locked
+          1
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
@@ -30,22 +28,19 @@ test = {
           >>> gamestate.time = 1
           >>> bee.action(gamestate) # slow causes slowness when gamestate.time is odd. bee should take no action (moving or stinging)
           >>> bee.place.name
-          46f9851313dc368f747e69f1670450da
-          # locked
+          'tunnel_0_5'
           >>> gamestate.time += 1
           >>> bee.action(gamestate) # bee is not affected when gamestate.time is even. bee should take its regular action
           >>> bee.place.name
-          040b6ad98a7360eba8d493c250a9b82e
-          # locked
+          'tunnel_0_4'
           >>> for _ in range(5):
           ...    gamestate.time += 1
           ...    bee.action(gamestate)
           >>> bee.place.name # hint: remember that the slow effect wears off after 5 turns. consider how many turns the bee was already affected before the for loop starts.
-          7f44338412808161209e944b1ee0f78c
-          # locked
+          'tunnel_0_1'
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
@@ -59,23 +54,20 @@ test = {
           >>> gamestate.time = 1
           >>> bee.action(gamestate) # slow causes slowness when gamestate.time is odd. bee should take no action (moving or stinging)
           >>> bee.place.name
-          46f9851313dc368f747e69f1670450da
-          # locked
+          'tunnel_0_5'
           >>> gamestate.time += 1
           >>> bee.action(gamestate) # bee is not affected when gamestate.time is even. bee should take its regular action
           >>> bee.place.name
-          040b6ad98a7360eba8d493c250a9b82e
-          # locked
+          'tunnel_0_4'
           >>> slow.action(gamestate) # slow throws syrup again. slow's effects will take place for 5 more turns
           >>> for _ in range(5):
           ...    gamestate.time += 1
           ...    bee.action(gamestate)
           >>> bee.place.name
-          ba5c35f55ba3229d1eb021382d9d19c5
-          # locked
+          'tunnel_0_2'
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {

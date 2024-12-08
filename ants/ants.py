@@ -141,7 +141,7 @@ class Ant(Insect):
     def double(self):
         """Double this ants's damage, if it has not already been doubled."""
         # BEGIN Problem 12
-        # if self.is_doubled: # 我在不要笑挑战中取得了一秒的好成绩。
+        # if self.is_doubled: # 我在不要笑挑战中取得了一秒的好成绩。laughter
         if not self.is_doubled:
             self.damage *= 2
             self.is_doubled = True
@@ -489,13 +489,36 @@ class SlowThrower(ThrowerAnt):
     name = 'Slow'
     food_cost = 6
     # BEGIN Problem EC 1
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem EC 1
 
     def throw_at(self, target):
-        # BEGIN Problem EC 1
-        "*** YOUR CODE HERE ***"
-        # END Problem EC 1
+        # super().throw_at(target)
+        # if target is None:
+        #     print(f"Target is None")
+        # # print(f"Target is {target.name}")
+        # # if target.action is None:
+        #     # assert target.action is not None, "Target is {target.name}"
+        # if not hasattr(target, 'action'):  
+        #     print(f"Error: Target does not have an 'action' method.")  
+        # return  
+        # origin_action = target.action
+        # bullshit. 
+        if not hasattr(target, 'slow_turn'):
+            target.slow_turn = 0
+        def slow_action(gamestate):
+            if target.slow_turn == 0:
+                # target.action(gamestate)
+                Bee.action(target,gamestate)
+            else:
+                if gamestate.time % 2 == 0:
+                    # target.action(gamestate)// infenite recursion, i do not know why.
+                    Bee.action(target,gamestate)
+                target.slow_turn -= 1
+        if target is not None:
+            target.action = slow_action
+            target.slow_turn = 5
+    # END Problem EC 1
 
 
 class ScaryThrower(ThrowerAnt):
@@ -504,12 +527,16 @@ class ScaryThrower(ThrowerAnt):
     name = 'Scary'
     food_cost = 6
     # BEGIN Problem EC 2
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem EC 2
-
+    scary_turn = 2
     def throw_at(self, target):
         # BEGIN Problem EC 2
-        "*** YOUR CODE HERE ***"
+        super().throw_at(target)
+        target.scare(self.scary_turn)
+
+                
+                
         # END Problem EC 2
 
 
@@ -573,7 +600,11 @@ class Bee(Insect):
     name = 'Bee'
     damage = 1
     is_waterproof = True
-
+    is_scared = False
+    is_brave = False
+    
+    scare_turn = 0
+    slow_turn = 0
 
     def sting(self, ant):
         """Attack an ANT, reducing its health by 1."""
@@ -598,12 +629,23 @@ class Bee(Insect):
         gamestate -- The GameState, used to access game state information.
         """
         destination = self.place.exit
-
+        scared_destination = self.place.entrance
 
         if self.blocked():
             self.sting(self.place.ant)
+        if self.is_scared:
+            if scared_destination is not None and not scared_destination.is_hive:
+                self.move_to(scared_destination)
+            self.scare_turn -= 1
+            if self.scare_turn == 0:
+                self.is_scared = False
+            # return
+        # elif self.health > 0 and destination is not None and not destination.is_hive:
+            # self.move_to(destination)
         elif self.health > 0 and destination is not None:
             self.move_to(destination)
+
+
 
     def add_to(self, place):
         place.bees.append(self)
@@ -619,7 +661,13 @@ class Bee(Insect):
         go backwards LENGTH times.
         """
         # BEGIN Problem EC 2
-        "*** YOUR CODE HERE ***"
+        self.scare_turn = length
+        if not self.is_brave:
+            if length > 0:
+                self.is_scared = True
+            else:
+                self.is_scared = False
+        self.is_brave = True
         # END Problem EC 2
 
 
