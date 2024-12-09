@@ -101,6 +101,7 @@ class Ant(Insect):
     is_container = False
     is_doubled = False
     # ADD CLASS ATTRIBUTES HERE
+    blocks_path = True
 
     def __init__(self, health=1):
         super().__init__(health)
@@ -260,6 +261,7 @@ class FireAnt(Ant):
     name = 'Fire'
     damage = 3
     food_cost = 5
+    # blocks_path = False
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 5
     implemented = True   # Change to True to view in the GUI
@@ -547,13 +549,19 @@ class NinjaAnt(Ant):
     damage = 1
     food_cost = 5
     # OVERRIDE CLASS ATTRIBUTES HERE
+    blocks_path = False
     # BEGIN Problem EC 3
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem EC 3
 
+    def __init__(self, health=1):
+        super().__init__(health)
+
     def action(self, gamestate):
-        # BEGIN Problem EC 3
-        "*** YOUR CODE HERE ***"
+        # BEGIN Problem EC 
+        for bee in self.place.bees[:]:
+            bee.reduce_health(self.damage)
+        
         # END Problem EC 3
 
 
@@ -619,7 +627,10 @@ class Bee(Insect):
         """Return True if this Bee cannot advance to the next Place."""
         # Special handling for NinjaAnt
         # BEGIN Problem EC 3
-        return self.place.ant is not None
+        if self.place.ant is None or self.place.ant.blocks_path == False:
+            return False
+        return True
+        # return self.place.ant is not None
         # END Problem EC 3
 
     def action(self, gamestate):
@@ -633,7 +644,7 @@ class Bee(Insect):
 
         if self.blocked():
             self.sting(self.place.ant)
-        if self.is_scared:
+        elif self.is_scared:  # when there is swithes, remember to use elif.
             if scared_destination is not None and not scared_destination.is_hive:
                 self.move_to(scared_destination)
             self.scare_turn -= 1
