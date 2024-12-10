@@ -572,7 +572,8 @@ class LaserAnt(ThrowerAnt):
     food_cost = 10
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem EC 4
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
+    base_damage = 2
     # END Problem EC 4
 
     def __init__(self, health=1):
@@ -581,12 +582,37 @@ class LaserAnt(ThrowerAnt):
 
     def insects_in_front(self):
         # BEGIN Problem EC 4
-        return {}
-        # END Problem EC 4
+        current_place = self.place.entrance
+        insects_and_distances = {}
+        distance = 0
+        if self.place.ant.is_container:
+            insects_and_distances[self.place.ant] = distance
+        if self.place.bees is not None:
+            for bee in self.place.bees:
+                insects_and_distances[bee] = distance
+        distance += 1
+        while current_place is not None and not current_place.is_hive:
+            if current_place.ant is not None:
+                if current_place.ant.is_container:
+                    if current_place.ant.ant_contained is not None:
+                        insects_and_distances[current_place.ant.ant_contained] = distance
+                else:
+                    insects_and_distances[current_place.ant] = distance
+
+            if current_place.bees is not None:
+                for bee in current_place.bees:
+                    insects_and_distances[bee] = distance
+            distance += 1
+            current_place = current_place.entrance
+        return insects_and_distances 
+        # END Problem EC 4 ok
 
     def calculate_damage(self, distance):
         # BEGIN Problem EC 4
-        return 0
+        damage = self.base_damage
+        damage -= distance*0.25
+        damage -= self.insects_shot*0.0625
+        return 0 if damage < 0 else damage
         # END Problem EC 4
 
     def action(self, gamestate):
@@ -613,7 +639,6 @@ class Bee(Insect):
     
     scare_turn = 0
     slow_turn = 0
-
     def sting(self, ant):
         """Attack an ANT, reducing its health by 1."""
         ant.reduce_health(self.damage)

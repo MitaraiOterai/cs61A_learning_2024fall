@@ -1,5 +1,5 @@
 from ants import *
-from ants import Hive, AssaultPlan, dry_layout, GameState, ant_types, Bee, FireAnt
+from ants import Hive, AssaultPlan, dry_layout, GameState, ant_types, LaserAnt, HarvesterAnt, Bee
 
 # 创建蜂巢和布局
 beehive, layout = Hive(AssaultPlan()), dry_layout
@@ -10,44 +10,72 @@ dimensions = (1, 9)
 # 创建游戏状态
 gamestate = GameState(beehive, ant_types(), layout, dimensions)
 
-# 测试代码
-place = gamestate.places['tunnel_0_4']
-bee = Bee(10)
-ant = FireAnt(1)
+# # 测试代码
+# laser = LaserAnt()
+# ant = HarvesterAnt(2)
+# bee1 = Bee(2)
+# bee2 = Bee(2)
+# bee3 = Bee(2)
+# bee4 = Bee(2)
 
-# 将 Bee 和 FireAnt 添加到 place
-place.add_insect(bee)
-place.add_insect(ant)
-
-# # 执行 Bee 的动作，攻击 FireAnt
-# bee.action(gamestate)
-# print(f"Bee 的生命值（第一次攻击后）: {bee.health}")
-# print(f"FireAnt 的生命值（第一次攻击后）: {ant.health}")
-# print(f"FireAnt 是否已经死亡: {place.ant is None}")
-# print(f"Bee 的位置（第一次攻击后）: {bee.place.name}")
+# # 将 LaserAnt、Bee 和 HarvesterAnt 添加到相应的位置
+# gamestate.places["tunnel_0_0"].add_insect(laser)
+# gamestate.places["tunnel_0_0"].add_insect(bee4)
+# gamestate.places["tunnel_0_3"].add_insect(bee1)
+# gamestate.places["tunnel_0_3"].add_insect(bee2)
+# gamestate.places["tunnel_0_4"].add_insect(ant)
+# gamestate.places["tunnel_0_5"].add_insect(bee3)
 
 
-# # 检查 Bee 的生命值
-# bee_health_after_attack = bee.health
+# # 创建蜂巢和布局
+# beehive, layout = Hive(AssaultPlan()), dry_layout
 
-# # 检查 FireAnt 的生命值
-# ant_health_after_attack = ant.health
+# # 设置游戏尺寸
+# dimensions = (1, 9)
 
-# # 检查 FireAnt 是否已经死亡
-# is_ant_dead = place.ant is None
+# # 创建游戏状态
+# gamestate = GameState(beehive, ant_types(), layout, dimensions)
 
-# # 再次执行 Bee 的动作，检查 Bee 是否被阻挡
-# bee.action(gamestate)
+# # 测试代码
+laser = LaserAnt()
+container_laser = TankAnt()
+bee2 = Bee(3)
+harvester_ant = HarvesterAnt(3)
+container_ant = BodyguardAnt()
+bee3 = Bee(4)
 
-# # 检查 Bee 的生命值是否未变
-# bee_health_after_second_attack = bee.health
+# 将 LaserAnt、TankAnt、Bee 和 HarvesterAnt 添加到相应的位置
+gamestate.places["tunnel_0_0"].add_insect(laser)
+gamestate.places["tunnel_0_0"].add_insect(container_laser)
+gamestate.places["tunnel_0_2"].add_insect(bee2)
+gamestate.places["tunnel_0_8"].add_insect(harvester_ant)
+gamestate.places["tunnel_0_8"].add_insect(container_ant)
+gamestate.places["tunnel_0_8"].add_insect(bee3)
 
-# # 检查 Bee 的位置是否未变
-# bee_place_after_attack = bee.place.name
+# # 执行 LaserAnt 的动作
+# laser.action(gamestate)
 
-# print(f"Bee 的生命值（第一次攻击后）: {bee_health_after_attack}")
-# print(f"FireAnt 的生命值（第一次攻击后）: {ant_health_after_attack}")
-# print(f"FireAnt 是否已经死亡: {is_ant_dead}")
-# print(f"Bee 的生命值（第二次攻击后）: {bee_health_after_second_attack}")
-# print(f"Bee 的位置（第二次攻击后）: {bee_place_after_attack}")
+# # 检查 Bee2 的生命值
+# bee2_health_after_attack = bee2.health
 
+# # 检查 HarvesterAnt 的生命值
+# harvester_health_after_attack = harvester_ant.health
+
+# # 检查 ContainerAnt 的生命值
+# container_health_after_attack = container_ant.health
+
+# # 检查 Bee3 的生命值
+# bee3_health_after_attack = bee3.health
+
+# # 检查 LaserAnt 的生命值
+# laser_health_after_attack = laser.health
+
+# # 检查 ContainerLaser 的生命值
+# container_laser_health_after_attack = container_laser.health
+
+# print(f"Bee2 的生命值（攻击后）: {bee2_health_after_attack}")
+# print(f"HarvesterAnt 的生命值（攻击后）: {harvester_health_after_attack}")
+# print(f"ContainerAnt 的生命值（攻击后）: {container_health_after_attack}")
+# print(f"Bee3 的生命值（攻击后）: {bee3_health_after_attack}")
+# print(f"LaserAnt 的生命值（攻击后）: {laser_health_after_attack}")
+# print(f"ContainerLaser 的生命值（攻击后）: {container_laser_health_after_attack}")
