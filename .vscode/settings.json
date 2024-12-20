@@ -1,5 +1,7 @@
 {
     "Codegeex.GenerationPreference": "line by line",
     "Codegeex.CommitMessage.LanguagePreference": "English",
-    "Codegeex.RepoIndex": true
+    "Codegeex.RepoIndex": true,
+    "vim.vimrc.enable": true,
+    "vim.vimrc.path": "C:\\abc\\vim\\.vimrc"
 }
